@@ -1,6 +1,7 @@
 using System.Net;
-using ClimaBrasil.API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using ClimaBrasil.Application.Handlers.BrasilApiClima.Queries;
 
 namespace ClimaBrasil.API.Controllers
 {
@@ -9,22 +10,22 @@ namespace ClimaBrasil.API.Controllers
     [Route("api/cidade/[controller]")]
     public class CilmaCidadeController : ControllerBase
     {
-        public readonly ICidadeService _cidadeService;
+        private readonly IMediator _mediator;
 
-        public CilmaCidadeController(ICidadeService cidadeService)
+        public CilmaCidadeController(IMediator mediator)
         {
-            _cidadeService = cidadeService;
+            _mediator = mediator;
         }
 
-
-        [HttpGet("clima/{codigoCidade}")]
+        [HttpGet("clima/fromAPI/{codigoCidade}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> BuscarCidadeClima([FromRoute] int codigoCidade) 
+        public async Task<IActionResult> BuscarCidadeClimaInApi([FromRoute] int codigoCidade) 
         {
-            var response = await _cidadeService.BuscarCidadeClima(codigoCidade);
+            var query = new BuscarCidadeClimaByCityCode{ CodigoCidade = codigoCidade };
+            var response = await _mediator.Send(query);
 
             if(response.CodigoHttp == HttpStatusCode.OK) 
             {
