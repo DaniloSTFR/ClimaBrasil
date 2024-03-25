@@ -1,11 +1,12 @@
 
 namespace ClimaBrasil.Domain.Abstractions
 {
+    //TODO: RETIRAR O IUnitOfWork
     public interface IUnitOfWork
     {
-        ICidadeRepository CidadeRepository { get; }
+        ICidadesClimaRepository CidadeClimaRepository { get; }
 
-        IAeroportoRepository AeroportoRepository { get; }
+        IAeroportosClimaRepository AeroportoClimaRepository { get; }
         Task CommitAsync();
     }
 }

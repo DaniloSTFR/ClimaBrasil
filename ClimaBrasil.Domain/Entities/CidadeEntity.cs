@@ -11,6 +11,7 @@ namespace ClimaBrasil.Domain.Entities
         public string? Estado { get; private set; }
         public DateTime? AtualizadoEm { get; private set; }
         public List<ClimaEntity>? Clima { get; private set; }
+        public string? RotaRequest { get; set; } 
 
         #endregion
 
@@ -18,25 +19,25 @@ namespace ClimaBrasil.Domain.Entities
         {
         }
 
-        public CidadeEntity(string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima)
+        public CidadeEntity(string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima, string? rotaRequest)
         {
-            ValidateDomain(cidade, estado, atualizadoEm, clima);
+            ValidateDomain(cidade, estado, atualizadoEm, clima, rotaRequest);
         }
 
         [JsonConstructor]
-        public CidadeEntity(int id, string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima)
+        public CidadeEntity(int id, string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima, string? rotaRequest)
         {
             DomainValidation.When(string.IsNullOrEmpty(id.ToString()), "Id é inválido.");
             Id = id;
-            ValidateDomain(cidade, estado, atualizadoEm, clima);
+            ValidateDomain(cidade, estado, atualizadoEm, clima, rotaRequest);
         }
 
-        public void Update(int id, string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima)
+        public void Update(int id, string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima, string? rotaRequest)
         {
-            ValidateDomain(cidade, estado, atualizadoEm, clima);
+            ValidateDomain(cidade, estado, atualizadoEm, clima, rotaRequest);
         }
 
-         private void ValidateDomain(string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima)
+         private void ValidateDomain(string? cidade, string? estado, DateTime? atualizadoEm, List<ClimaEntity>? clima, string? rotaRequest)
          {
 
             DomainValidation.When(string.IsNullOrEmpty(cidade),
@@ -52,12 +53,16 @@ namespace ClimaBrasil.Domain.Entities
             DomainValidation.When(clima == null,
                 "Clima é inválido. O valores do Clima é Requerido.");
 
+            DomainValidation.When(string.IsNullOrEmpty(rotaRequest),
+                "A rota de requisição é inválido. A rota é Requerido.");
+
 
 
             Cidade = cidade;
             Estado = estado;
             AtualizadoEm = atualizadoEm;
             Clima = clima;
+            RotaRequest = rotaRequest;
          }
 
         

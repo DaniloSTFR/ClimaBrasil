@@ -16,6 +16,7 @@ namespace ClimaBrasil.Domain.Entities
         public string? Condicao { get; set; }
         public string? CondicaoDesc { get; set; }
         public float? Temp { get; set; }   
+        public string? RotaRequest { get; set; } 
         #endregion 
 
         public AeroportoEntity()
@@ -23,22 +24,24 @@ namespace ClimaBrasil.Domain.Entities
         }
 
         public AeroportoEntity(string? codigoAeroporto, DateTime? atualizadoEm, int? pressaoAtmosferica, string? visibilidade, 
-                            int? vento, int? direcaoVento, int? umidade, string? condicao, string? condicaoDesc, float? temp)
+                            int? vento, int? direcaoVento, int? umidade, string? condicao, string? condicaoDesc, float? temp, string? rotaRequest)
         {
-            CodigoAeroporto = codigoAeroporto;
-            AtualizadoEm = atualizadoEm;
-            PressaoAtmosferica = pressaoAtmosferica;
-            Visibilidade = visibilidade;
-            Vento = vento;
-            DirecaoVento = direcaoVento;
-            Umidade = umidade;
-            Condicao = condicao;
-            CondicaoDesc = condicaoDesc;
-            Temp = temp;
+            ValidateDomain(codigoAeroporto, atualizadoEm, pressaoAtmosferica, visibilidade, 
+                             vento, direcaoVento, umidade, condicao, condicaoDesc, temp, rotaRequest);
+        }
+
+        [JsonConstructor]
+        public AeroportoEntity(int id, string? codigoAeroporto, DateTime? atualizadoEm, int? pressaoAtmosferica, string? visibilidade, 
+                            int? vento, int? direcaoVento, int? umidade, string? condicao, string? condicaoDesc, float? temp, string? rotaRequest)
+        {
+            DomainValidation.When(string.IsNullOrEmpty(id.ToString()), "Id é inválido.");
+            Id = id;
+            ValidateDomain(codigoAeroporto, atualizadoEm, pressaoAtmosferica, visibilidade, 
+                             vento, direcaoVento, umidade, condicao, condicaoDesc, temp, rotaRequest);
         }
 
         private void ValidateDomain(string? codigoAeroporto, DateTime? atualizadoEm, int? pressaoAtmosferica, string? visibilidade, 
-                                int? vento, int? direcaoVento, int? umidade, string? condicao, string? condicaoDesc, float? temp)
+                                int? vento, int? direcaoVento, int? umidade, string? condicao, string? condicaoDesc, float? temp, string? rotaRequest)
         {
 
             DomainValidation.When(string.IsNullOrEmpty(codigoAeroporto),
@@ -64,6 +67,9 @@ namespace ClimaBrasil.Domain.Entities
 
             DomainValidation.When(temp == null,
                 "Temperatura (em graus celsius) é inválido. O valor é Requerido.");
+
+            DomainValidation.When(string.IsNullOrEmpty(rotaRequest),
+                "A rota de requisição é inválido. A rota é Requerido.");
            
             
             CodigoAeroporto = codigoAeroporto;
@@ -76,6 +82,7 @@ namespace ClimaBrasil.Domain.Entities
             Condicao = condicao;
             CondicaoDesc = condicaoDesc;
             Temp = temp;
+            RotaRequest = rotaRequest;
         }
         
     }

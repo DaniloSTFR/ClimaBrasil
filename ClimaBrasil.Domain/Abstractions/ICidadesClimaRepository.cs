@@ -3,13 +3,13 @@ using ClimaBrasil.Domain.Entities;
 
 namespace ClimaBrasil.Domain.Abstractions
 {
-    public interface ICidadeRepository
+    public interface ICidadesClimaRepository
     {
         Task<IEnumerable<CidadeEntity>> GetClimaCidade();
-        Task<CidadeEntity> GetClimaCidadeById(int Id);
+        Task<CidadeEntity> GetClimaCidadeById(int id);
         Task<CidadeEntity> AddClimaCidade(CidadeEntity climaCidade);
         void UpdateClimaCidade(CidadeEntity climaCidade);
-        Task<CidadeEntity> DeleteClimaCidade(int Id);
+        Task<CidadeEntity> DeleteClimaCidade(int id);
 
         //TODO: GetClimaCidadeByCityCode
     }
