@@ -1,15 +1,12 @@
 using ClimaBrasil.Domain.Validation;
 using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClimaBrasil.Domain.Entities
 {
-    public class Clima : BaseEntity
+    public class ClimaEntity : BaseEntity
     {
 
         #region  External Props
-
         public DateTime? Data { get; private set; }
         public string? Condicao { get; private set; }
         public int? Min { get; private set; }
@@ -19,18 +16,18 @@ namespace ClimaBrasil.Domain.Entities
 
         #endregion
 
-        public Clima()
+        public ClimaEntity()
         {
         }
 
-        public Clima(DateTime? data, string? condicao, int? min, int? max, int? indiceUv, 
+        public ClimaEntity(DateTime? data, string? condicao, int? min, int? max, int? indiceUv, 
                     string? condicaoDesc)
         {
             ValidateDomain( data, condicao, min, max, indiceUv, condicaoDesc);
         }
 
         [JsonConstructor]
-        public Clima(int id, DateTime? data, string? condicao, int? min, int? max, 
+        public ClimaEntity(int id, DateTime? data, string? condicao, int? min, int? max, 
                     float? indiceUv, string? condicaoDesc)
         {
             DomainValidation.When(string.IsNullOrEmpty(id.ToString()), "Id é inválido.");
@@ -53,7 +50,7 @@ namespace ClimaBrasil.Domain.Entities
                 "Data é inválido. Data é Requerido.");
 
             DomainValidation.When(string.IsNullOrEmpty(condicao),
-                "Condicao é inválido. Nome é Condicao.");
+                "Condicao é inválido. Nome é Requerido.");
 
             DomainValidation.When(min == null,
                 "Temperatura minima é inválido. Temperatura minima é Requerido.");

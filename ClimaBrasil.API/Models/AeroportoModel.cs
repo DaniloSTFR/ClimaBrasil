@@ -8,7 +8,7 @@ namespace ClimaBrasil.API.Models
         public string? CodigoAeroporto { get; set; }
 
         [JsonPropertyName("atualizado_em")]
-        public DateTime? AtualizadoEm { get; set; }
+        public string? AtualizadoEm { get; set; }
 
         [JsonPropertyName("pressao_atmosferica")]
         public int? PressaoAtmosferica { get; set; }
