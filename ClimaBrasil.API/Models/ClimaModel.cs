@@ -17,7 +17,7 @@ namespace ClimaBrasil.API.Models
         public int? Max { get; set; }
 
         [JsonPropertyName("indice_uv")]
-        public int? IndiceUv { get; set; }
+        public float? IndiceUv { get; set; }
 
         [JsonPropertyName("condicao_desc")]
         public string? CondicaoDesc { get; set; }

@@ -16,6 +16,6 @@ namespace ClimaBrasil.API.DTOs
         public int? Umidade { get; set; }
         public string? Condicao { get; set; }
         public string? CondicaoDesc { get; set; }
-        public int? Temp { get; set; }        
+        public float? Temp { get; set; }        
     }
 }

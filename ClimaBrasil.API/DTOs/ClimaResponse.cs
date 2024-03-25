@@ -7,7 +7,7 @@ namespace ClimaBrasil.API.DTOs
         public string? Condicao { get; set; }
         public int? Min { get; set; }
         public int? Max { get; set; }
-        public int? IndiceUv { get; set; }
+        public float? IndiceUv { get; set; }
         public string? CondicaoDesc { get; set; }
     }
 }

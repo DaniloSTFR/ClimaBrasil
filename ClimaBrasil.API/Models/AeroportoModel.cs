@@ -32,6 +32,6 @@ namespace ClimaBrasil.API.Models
         public string? CondicaoDesc { get; set; }
 
         [JsonPropertyName("temp")]
-        public int? Temp { get; set; }
+        public float? Temp { get; set; }
     }
 }
