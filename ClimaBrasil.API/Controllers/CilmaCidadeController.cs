@@ -31,6 +31,9 @@ namespace ClimaBrasil.API.Controllers
 
             if(response.CodigoHttp == HttpStatusCode.OK) 
             {
+                var command = new CreateCidadeClimaCommand{ cidadeResponse = response.DadosRetorno };
+                var createdCiadeClimaInDb = await _mediator.Send(command);
+                
                 return Ok(response.DadosRetorno);
             }
             else 

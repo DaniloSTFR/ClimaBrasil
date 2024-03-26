@@ -9,5 +9,6 @@ namespace ClimaBrasil.Application.BrasilApiRest.DTOs
         public string? Estado { get; set; }
         public DateTime? AtualizadoEm { get; set; }
         public List<ClimaResponse>? Clima { get; set; }
+        public string? RotaRequest { get; set; } 
     }
 }

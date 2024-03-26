@@ -16,6 +16,8 @@ namespace ClimaBrasil.Application.BrasilApiRest.Models
 
         [JsonPropertyName("clima")]
         public List<ClimaModel>? Clima { get; set; }
+
+        public string? RotaRequest { get; set; } 
     
     }
 }

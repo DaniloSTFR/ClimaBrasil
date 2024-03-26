@@ -28,6 +28,10 @@ builder.Services.AddAutoMapper(typeof(AeroportoMapping));
 builder.Services.AddAutoMapper(typeof(CidadeMapping));
 builder.Services.AddAutoMapper(typeof(ClimaMapping));
 
+builder.Services.AddAutoMapper(typeof(AeroportoEntityDTOMapping));
+builder.Services.AddAutoMapper(typeof(CidadeEntityDTOMapping));
+builder.Services.AddAutoMapper(typeof(ClimaEntityDTOMapping));
+
 var sqlServerConnection = builder.Configuration
                               .GetConnectionString("DefaultConnection");
                                       // Registrar IDbConnection como uma instância única

@@ -2,6 +2,7 @@
 
 using ClimaBrasil.Domain.Abstractions;
 using ClimaBrasil.Domain.Entities;
+using ClimaBrasil.Infrastructure.Queries.Input;
 using Dapper;
 using System.Data;
 
@@ -17,7 +18,23 @@ namespace ClimaBrasil.Infrastructure.Repositories
         }
         public Task<CidadeEntity> AddClimaCidade(CidadeEntity climaCidade)
         {
-            throw new NotImplementedException();
+            if (climaCidade is null)
+                throw new ArgumentNullException(nameof(climaCidade));
+
+            var query = new InsertCidadeClimaQuery().InsertCidadeClimaQueryModel(climaCidade);
+            try
+            {
+                using (_dbConnection)
+                {
+                   _dbConnection.Execute(query.Query, query.Parameters);
+                }
+            }
+            catch
+            {
+                throw new Exception("Erro ao inserir veiculo");
+            }
+
+            return Task.FromResult(climaCidade);
         }
 
         public Task<CidadeEntity> DeleteClimaCidade(int id)

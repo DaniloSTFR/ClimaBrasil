@@ -33,5 +33,7 @@ namespace ClimaBrasil.Application.BrasilApiRest.Models
 
         [JsonPropertyName("temp")]
         public float? Temp { get; set; }
+
+        public string? RotaRequest { get; set; } 
     }
 }
