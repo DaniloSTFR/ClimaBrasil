@@ -1,0 +1,25 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  climabrasilapi:
+    image: climabrasilapi
+    build:
+      context: .
+      dockerfile: ClimaBrasil.API/Dockerfile
+    ports:
+      - 8081:7179
+      - 8080:5254
+    depends_on:
+     - sqlserverdata
+
+  sqlserverdata:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - MSSQL_SA_PASSWORD=SetSenha2023
+      - ACCEPT_EULA=Y
+    volumes:
+      - c:\dados\volumes\mssql:/var/opt/mssql/data   
+    ports:
+      - "7180:1433"  
