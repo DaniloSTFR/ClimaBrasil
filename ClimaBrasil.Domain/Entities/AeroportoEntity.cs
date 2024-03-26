@@ -6,16 +6,16 @@ namespace ClimaBrasil.Domain.Entities
     public class AeroportoEntity : BaseEntity
     {
         #region  External Props
-        public string? CodigoAeroporto { get; set; }
-        public DateTime? AtualizadoEm { get; set; }
-        public int? PressaoAtmosferica { get; set; }
-        public string? Visibilidade { get; set; }
-        public int? Vento { get; set; }
-        public int? DirecaoVento { get; set; }
-        public int? Umidade { get; set; }
-        public string? Condicao { get; set; }
-        public string? CondicaoDesc { get; set; }
-        public float? Temp { get; set; }   
+        public string? CodigoAeroporto { get; private set; }
+        public DateTime? AtualizadoEm { get; private set; }
+        public int? PressaoAtmosferica { get; private set; }
+        public string? Visibilidade { get; private set; }
+        public int? Vento { get; private set; }
+        public int? DirecaoVento { get; private set; }
+        public int? Umidade { get; private set; }
+        public string? Condicao { get; private set; }
+        public string? CondicaoDesc { get; private set; }
+        public float? Temp { get; private set; }   
         public string? RotaRequest { get; set; } 
         #endregion 
 

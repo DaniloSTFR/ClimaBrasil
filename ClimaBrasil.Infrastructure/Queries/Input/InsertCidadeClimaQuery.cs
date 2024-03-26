@@ -5,12 +5,17 @@ namespace ClimaBrasil.Infrastructure.Queries.Input
 {
     public class InsertCidadeClimaQuery : BaseQuery
     {
-        public QueryModel InsertCidadeClimaQueryModel(CidadeEntity clima)
+        public QueryModel InsertCidadeClimaQueryModel(CidadeEntity cidade, bool returnID)
         {
+
+            string returnIDStr = "";
+            if(returnID) returnIDStr = " OUTPUT inserted.Id AS Id ";
+
             this.Table = Map.GetCidadeClimaTable();
 
             this.Query = $@"
             INSERT INTO {this.Table}
+            {returnIDStr}
             VALUES
             (
                 @Cidade,
@@ -23,11 +28,11 @@ namespace ClimaBrasil.Infrastructure.Queries.Input
 
             this.Parameters = new 
             {
-                Cidade = clima.Cidade,
-                Estado = clima.Estado,
-                AtualizadoEm = clima.AtualizadoEm,
-                RotaRequest = clima.RotaRequest,
-                CreatedOn = clima.CreatedOn
+                Cidade = cidade.Cidade,
+                Estado = cidade.Estado,
+                AtualizadoEm = cidade.AtualizadoEm,
+                RotaRequest = cidade.RotaRequest,
+                CreatedOn = cidade.CreatedOn
             };
 
             return new QueryModel(this.Query, this.Parameters);

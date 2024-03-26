@@ -45,6 +45,7 @@ builder.Services.AddSingleton<IDbConnection>(provider =>
 builder.Services.AddScoped<IAeroportosClimaRepository, AeroportosClimaRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICidadesClimaRepository, CidadesClimaRepository>();
+builder.Services.AddScoped<IClimaRepository, ClimaRepository>();
 
 var myhandlers = AppDomain.CurrentDomain.Load("ClimaBrasil.Application");
         builder.Services.AddMediatR(cfg =>

@@ -15,26 +15,38 @@ namespace ClimaBrasil.Infrastructure.Repositories
         public CidadesClimaRepository(IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
+
         }
-        public Task<CidadeEntity> AddClimaCidade(CidadeEntity climaCidade)
+
+        public async Task<CidadeEntity> AddClimaCidade(CidadeEntity climaCidade)
         {
+            ClimaRepository _climaRepository = new ClimaRepository(_dbConnection);
+
             if (climaCidade is null)
                 throw new ArgumentNullException(nameof(climaCidade));
 
-            var query = new InsertCidadeClimaQuery().InsertCidadeClimaQueryModel(climaCidade);
+            var query = new InsertCidadeClimaQuery().InsertCidadeClimaQueryModel(climaCidade,true);
             try
             {
                 using (_dbConnection)
                 {
-                   _dbConnection.Execute(query.Query, query.Parameters);
-                }
+                   var climaCidadeID = await _dbConnection.ExecuteScalarAsync(query.Query, query.Parameters);
+                    if (climaCidadeID != null)
+                    {
+                        climaCidade.Id = Int32.Parse(climaCidadeID.ToString());
+                        _climaRepository.AddClima(climaCidade.Clima,climaCidade.Id);
+                    }
+                    else {
+                        climaCidade.Id = 0;
+                    }
+                }   
             }
             catch
             {
-                throw new Exception("Erro ao inserir veiculo");
+                throw new Exception("Erro ao inserir Clima da Cidade");
             }
 
-            return Task.FromResult(climaCidade);
+            return climaCidade;
         }
 
         public Task<CidadeEntity> DeleteClimaCidade(int id)
@@ -44,7 +56,7 @@ namespace ClimaBrasil.Infrastructure.Repositories
 
         // TODO: Avaliar os retornos pois envolvem mais de uma tabela, usar Inner join
         //SELECT * FROM CidadeClima AS CC
-	    //INNER JOIN Clima AS CL ON CC.Id = CL.[IdCidade]
+	    //INNER JOIN Clima AS CL ON CC.Id = CL.[IdCidadeClima]
         public async Task<IEnumerable<CidadeEntity>> GetClimaCidade()
         {
             string query = "SELECT * FROM dbo.CidadeClima";

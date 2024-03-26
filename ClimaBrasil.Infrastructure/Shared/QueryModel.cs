@@ -7,6 +7,10 @@ namespace ClimaBrasil.Infrastructure.Shared
 {
     public class QueryModel
     {
+        public QueryModel(string query)
+        {
+            Query = query;
+        }
         public QueryModel(string query, object parameters)
         {
             Query = query;

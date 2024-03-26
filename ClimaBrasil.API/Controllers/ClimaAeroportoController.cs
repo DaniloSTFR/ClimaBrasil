@@ -30,7 +30,10 @@ namespace ClimaBrasil.API.Controllers
 
             if(response.CodigoHttp == HttpStatusCode.OK) 
             {
-                return Ok(response.DadosRetorno);
+                var command = new CreateAeroportoClimaCommand{ aeroportoResponse = response.DadosRetorno };
+                var createdAeroportoClimaInDb = await _mediator.Send(command);
+
+                return Ok(createdAeroportoClimaInDb);
             }
             else 
             {

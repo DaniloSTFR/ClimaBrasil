@@ -24,10 +24,10 @@ namespace ClimaBrasil.Application.Handlers.CidadesClima.Commands
             public async Task<CidadeEntity> Handle(CreateCidadeClimaCommand request, CancellationToken cancellationToken)
             {
                 
-                var cidade =  _mapper.Map<CidadeEntity>(request.cidadeResponse);
-                var createdCiadeClimaInDb = await _cidadesClimaRepository.AddClimaCidade(cidade);
+                var cidade = _mapper.Map<CidadeEntity>(request.cidadeResponse);
+                var createdCidadeClimaInDb = await _cidadesClimaRepository.AddClimaCidade(cidade);
 
-                return createdCiadeClimaInDb;
+                return createdCidadeClimaInDb;
             }
 
          }

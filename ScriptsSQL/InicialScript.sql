@@ -23,7 +23,7 @@ GO
 IF OBJECT_ID(N'dbo.Clima', N'U') IS NULL
 CREATE TABLE dbo.Clima (
     [Id] INT PRIMARY KEY IDENTITY(1,1),
-	[IdCidade] INT NOT NULL,
+	[IdCidadeClima] INT NOT NULL,
     [Data] DATETIME NOT NULL,
     [Condicao] [varchar](255) NOT NULL,
     [Min] INT NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE dbo.Clima (
     [IndiceUv] FLOAT NOT NULL,
     [CondicaoDesc] [varchar](255) ,
     [CreatedOn] DATETIME NOT NULL,
-	CONSTRAINT FK_Cidade_ID FOREIGN KEY ([IdCidade]) REFERENCES CidadeClima([Id])
+	CONSTRAINT FK_Cidade_ID FOREIGN KEY ([IdCidadeClima]) REFERENCES CidadeClima([Id])
 )ON [PRIMARY]
 GO
 
@@ -113,7 +113,7 @@ USE [BrasilApiClima]
 GO
 
 INSERT INTO [dbo].[Clima]
-           ([IdCidade]
+           ([IdCidadeClima]
            ,[Data]
            ,[Condicao]
            ,[Min]
