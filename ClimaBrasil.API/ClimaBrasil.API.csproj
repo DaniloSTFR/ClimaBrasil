@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClimaBrasil.CrossCutting\ClimaBrasil.CrossCutting.csproj" />
     <ProjectReference Include="..\ClimaBrasil.Application\ClimaBrasil.Application.csproj" />
     <ProjectReference Include="..\ClimaBrasil.Domain\ClimaBrasil.Domain.csproj" />
     <ProjectReference Include="..\ClimaBrasil.Infrastructure\ClimaBrasil.Infrastructure.csproj" />

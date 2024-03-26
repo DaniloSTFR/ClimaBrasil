@@ -31,7 +31,7 @@ CREATE TABLE dbo.CidadeClima (
     [AtualizadoEm] DATETIME NOT NULL,
     [RotaRequest] [nvarchar](500) NOT NULL,
     [CreatedOn] DATETIME NOT NULL,
-    CONSTRAINT FK_Clima_ID FOREIGN KEY (IdClima) REFERENCES [dbo.Clima]([Id])
+    CONSTRAINT FK_Clima_ID FOREIGN KEY (IdClima) REFERENCES [Clima]([Id])
 )ON [PRIMARY]
 GO
 
@@ -55,4 +55,36 @@ CREATE TABLE dbo.AeroportoClima (
 GO
 
 
+USE [BrasilApiClima]
+GO
+
+INSERT INTO [dbo].[AeroportoClima]
+           ([CodigoAeroporto]
+           ,[AtualizadoEm]
+           ,[PressaoAtmosferica]
+           ,[Visibilidade]
+           ,[Vento]
+           ,[DirecaoVento]
+           ,[Umidade]
+           ,[Condicao]
+           ,[CondicaoDesc]
+           ,[Temp]
+           ,[RotaRequest]
+           ,[CreatedOn])
+     VALUES
+           (
+		   'SBAR'
+           ,'2024-03-25T12:00:00.400Z'
+           ,1010
+           ,'>10000'
+           ,22
+           ,80
+           ,75
+           ,'ps'
+           ,'Predomínio de Sol'
+           ,31
+           ,'https://brasilapi.com.br/api/cptec/v1/clima/aeroporto/SBAR'
+           ,GETDATE()
+		   )
+GO
 
