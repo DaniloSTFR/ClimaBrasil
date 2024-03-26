@@ -4,13 +4,26 @@ GO
 CREATE DATABASE [BrasilApiClima]
 GO
 
+---------------------------------------------------------
+
 USE [BrasilApiClima]
 GO
 
+IF OBJECT_ID(N'dbo.CidadeClima', N'U') IS NULL
+CREATE TABLE dbo.CidadeClima (
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Cidade] [varchar](255) NOT NULL,
+    [Estado] [varchar](255) NOT NULL,
+    [AtualizadoEm] DATETIME NOT NULL,
+    [RotaRequest] [nvarchar](500) NOT NULL,
+    [CreatedOn] DATETIME NOT NULL,
+)ON [PRIMARY]
+GO
 
 IF OBJECT_ID(N'dbo.Clima', N'U') IS NULL
 CREATE TABLE dbo.Clima (
     [Id] INT PRIMARY KEY IDENTITY(1,1),
+	[IdCidade] INT NOT NULL,
     [Data] DATETIME NOT NULL,
     [Condicao] [varchar](255) NOT NULL,
     [Min] INT NOT NULL,
@@ -18,20 +31,7 @@ CREATE TABLE dbo.Clima (
     [IndiceUv] FLOAT NOT NULL,
     [CondicaoDesc] [varchar](255) ,
     [CreatedOn] DATETIME NOT NULL,
-)ON [PRIMARY]
-GO
-
-
-IF OBJECT_ID(N'dbo.CidadeClima', N'U') IS NULL
-CREATE TABLE dbo.CidadeClima (
-    [Id] INT PRIMARY KEY IDENTITY(1,1),
-    [IdClima] INT NOT NULL,
-    [Cidade] [varchar](255) NOT NULL,
-    [Estado] [varchar](255) NOT NULL,
-    [AtualizadoEm] DATETIME NOT NULL,
-    [RotaRequest] [nvarchar](500) NOT NULL,
-    [CreatedOn] DATETIME NOT NULL,
-    CONSTRAINT FK_Clima_ID FOREIGN KEY (IdClima) REFERENCES [Clima]([Id])
+	CONSTRAINT FK_Cidade_ID FOREIGN KEY ([IdCidade]) REFERENCES CidadeClima([Id])
 )ON [PRIMARY]
 GO
 
@@ -53,7 +53,7 @@ CREATE TABLE dbo.AeroportoClima (
     [CreatedOn] DATETIME NOT NULL,
 )ON [PRIMARY]
 GO
-
+---------------------------------------------------------
 
 USE [BrasilApiClima]
 GO
@@ -73,18 +73,57 @@ INSERT INTO [dbo].[AeroportoClima]
            ,[CreatedOn])
      VALUES
            (
-		   'SBAR'
-           ,'2024-03-25T12:00:00.400Z'
-           ,1010
-           ,'>10000'
-           ,22
-           ,80
-           ,75
-           ,'ps'
-           ,'Predomínio de Sol'
-           ,31
-           ,'https://brasilapi.com.br/api/cptec/v1/clima/aeroporto/SBAR'
+			'SBAR','2024-03-25T12:00:00.400Z',1010,'>10000',22,80 ,75 ,'ps' ,'Predomínio de Sol',31
+           ,'https://brasilapi.com.br/api/cptec/v1/clima/aeroporto/SBAR',GETDATE()
+		   )
+GO
+---------------------------------------------------------------
+
+USE [BrasilApiClima]
+GO
+
+-- SET IDENTITY_INSERT to ON.  
+SET IDENTITY_INSERT dbo.[CidadeClima] ON;  
+GO  
+
+INSERT INTO [dbo].[CidadeClima]
+           ([Id]
+		   ,[Cidade]
+           ,[Estado]
+           ,[AtualizadoEm]
+           ,[RotaRequest]
+           ,[CreatedOn])
+     VALUES
+           (
+		    1
+		   ,'Brejo Alegre'
+           ,'SP'
+           ,'2020-12-27'
+           ,'https://brasilapi.com.br/api/cptec/v1/clima/previsao/999'
            ,GETDATE()
 		   )
 GO
+
+SET IDENTITY_INSERT dbo.[CidadeClima] OFF;  
+GO 
+
+---------------------------------------------------------------
+
+USE [BrasilApiClima]
+GO
+
+INSERT INTO [dbo].[Clima]
+           ([IdCidade]
+           ,[Data]
+           ,[Condicao]
+           ,[Min]
+           ,[Max]
+           ,[IndiceUv]
+           ,[CondicaoDesc]
+           ,[CreatedOn])
+     VALUES
+           (1,'2020-12-27','pc',20,30,13,'Pancadas de Chuva',GETDATE()),
+		   (1,'2020-12-28','pc',22,29,13,'Pancadas de Chuva',GETDATE())
+GO
+
 

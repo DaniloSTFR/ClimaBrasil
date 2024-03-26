@@ -25,12 +25,16 @@ namespace ClimaBrasil.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        // TODO: Avaliar os retornos pois envolvem mais de uma tabela, usar Inner join
+        //SELECT * FROM CidadeClima AS CC
+	    //INNER JOIN Clima AS CL ON CC.Id = CL.[IdCidade]
         public async Task<IEnumerable<CidadeEntity>> GetClimaCidade()
         {
             string query = "SELECT * FROM dbo.CidadeClima";
             return await _dbConnection.QueryAsync<CidadeEntity>(query);
         }
 
+        // TODO: Avaliar os retornos pois envolvem mais de uma tabela, usar Inner join
         public async Task<CidadeEntity> GetClimaCidadeById(int id)
         {
             string query = "SELECT * FROM dbo.CidadeClima WHERE Id = @Id";

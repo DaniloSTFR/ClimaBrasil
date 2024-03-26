@@ -8,7 +8,7 @@ using ClimaBrasil.Application.Handlers.BrasilApiClima.Queries;
 namespace ClimaBrasil.API.Controllers
 {
     [ApiController]
-    [Route("aeroporto/[controller]")]
+    [Route("[controller]")]
     public class ClimaAeroportoController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -41,11 +41,10 @@ namespace ClimaBrasil.API.Controllers
         [HttpGet("clima/InDb")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> BuscarAeroportoClimaInDataBase() 
+        public async Task<IActionResult> BuscarAeroportosClimaInDataBase() 
         {
-            var query = new GetAllAeroportoClimaQuery();
+            var query = new GetAllAeroportosClimaQuery();
             var allAeroportoClimaInDb = await _mediator.Send(query);
             return Ok(allAeroportoClimaInDb);
         }

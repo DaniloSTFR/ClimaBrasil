@@ -7,6 +7,8 @@ namespace ClimaBrasil.Domain.Entities
     {
 
         #region  External Props
+
+        public int? IdCidade { get; private set; }
         public DateTime? Data { get; private set; }
         public string? Condicao { get; private set; }
         public int? Min { get; private set; }
@@ -20,32 +22,35 @@ namespace ClimaBrasil.Domain.Entities
         {
         }
 
-        public ClimaEntity(DateTime? data, string? condicao, int? min, int? max, int? indiceUv, 
+        public ClimaEntity(int? idCidade, DateTime? data, string? condicao, int? min, int? max, int? indiceUv, 
                     string? condicaoDesc)
         {
-            ValidateDomain( data, condicao, min, max, indiceUv, condicaoDesc);
+            ValidateDomain(idCidade, data, condicao, min, max, indiceUv, condicaoDesc);
         }
 
         [JsonConstructor]
-        public ClimaEntity(int id, DateTime? data, string? condicao, int? min, int? max, 
+        public ClimaEntity(int id, int? idCidade, DateTime? data, string? condicao, int? min, int? max, 
                     float? indiceUv, string? condicaoDesc)
         {
             DomainValidation.When(string.IsNullOrEmpty(id.ToString()), "Id é inválido.");
             Id = id;
-            ValidateDomain( data, condicao, min, max, indiceUv, condicaoDesc);
+            ValidateDomain(idCidade, data, condicao, min, max, indiceUv, condicaoDesc);
         }
 
         
-        public void Update(DateTime? data, string? condicao, int? min, int? max, 
+        public void Update(int? idCidade,DateTime? data, string? condicao, int? min, int? max, 
                                     float? indiceUv, string? condicaoDesc)
         {
-            ValidateDomain( data, condicao, min, max, indiceUv, condicaoDesc);
+            ValidateDomain(idCidade, data, condicao, min, max, indiceUv, condicaoDesc);
         }
 
-        private void ValidateDomain(DateTime? data, string? condicao, int? min, int? max, 
+        private void ValidateDomain(int? idCidade, DateTime? data, string? condicao, int? min, int? max, 
                                     float? indiceUv, string? condicaoDesc)
 
         {
+            DomainValidation.When(idCidade == null,
+                "IdCidade é inválido. O Id é Requerido.");
+
             DomainValidation.When(data == null,
                 "Data é inválido. Data é Requerido.");
 
@@ -64,7 +69,7 @@ namespace ClimaBrasil.Domain.Entities
             DomainValidation.When(string.IsNullOrEmpty(condicaoDesc),
                 "O código da condição meteorológica é inválido. O código é Requerido.");
 
-
+            IdCidade = idCidade; 
             Data = data;
             Condicao = condicao;
             Min = min;
