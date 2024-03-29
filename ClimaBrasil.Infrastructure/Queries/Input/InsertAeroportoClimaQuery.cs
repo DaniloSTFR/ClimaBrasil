@@ -13,23 +13,23 @@ namespace ClimaBrasil.Infrastructure.Queries.Input
             this.Table = Map.GetAeroportoClimaTable(); 
 
             this.Query = $@"
-            INSERT INTO {this.Table}
-            {returnIDStr}
-            VALUES
-            (
-                @CodigoAeroporto,
-                @AtualizadoEm,
-                @PressaoAtmosferica,
-                @Visibilidade,
-                @Vento,
-                @DirecaoVento,
-                @Umidade,
-                @Condicao,
-                @CondicaoDesc,
-                @Temp,
-                @RotaRequest,
-                @CreatedOn
-            )
+                INSERT INTO {this.Table}
+                {returnIDStr}
+                VALUES
+                (
+                    @CodigoAeroporto,
+                    @AtualizadoEm,
+                    @PressaoAtmosferica,
+                    @Visibilidade,
+                    @Vento,
+                    @DirecaoVento,
+                    @Umidade,
+                    @Condicao,
+                    @CondicaoDesc,
+                    @Temp,
+                    @RotaRequest,
+                    @CreatedOn
+                )
             ";
             this.Parameters = new 
             {

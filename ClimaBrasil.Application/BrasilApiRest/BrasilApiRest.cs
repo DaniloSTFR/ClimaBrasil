@@ -18,7 +18,7 @@ namespace ClimaBrasil.Application.BrasilApiRest
                 var contentResp = await responseBrasilApi.Content.ReadAsStringAsync();
                 var objResponse = JsonSerializer.Deserialize<AeroportoModel>(contentResp);
 
-                if(objResponse != null) 
+                if(objResponse is not null) 
                     objResponse.RotaRequest = $"https://brasilapi.com.br/api/cptec/v1/clima/aeroporto/{icaoCode}";
 
                 if (responseBrasilApi.IsSuccessStatusCode) 
@@ -45,9 +45,12 @@ namespace ClimaBrasil.Application.BrasilApiRest
                 var contentResp = await responseBrasilApi.Content.ReadAsStringAsync();
                 var objResponse = JsonSerializer.Deserialize<CidadeModel>(contentResp);
 
-                if(objResponse != null) 
+                if(objResponse is not null)
+                {
                     objResponse.RotaRequest = $"https://brasilapi.com.br/api/cptec/v1/clima/previsao/{cityCode}"; 
-
+                    objResponse.CodigoCidade = cityCode;
+                } 
+                    
                 if (responseBrasilApi.IsSuccessStatusCode) 
                 {    
                     response.CodigoHttp = responseBrasilApi.StatusCode;

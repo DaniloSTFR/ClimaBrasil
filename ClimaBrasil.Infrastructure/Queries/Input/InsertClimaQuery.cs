@@ -10,26 +10,26 @@ namespace ClimaBrasil.Infrastructure.Queries.Input
             this.Table = Map.GetClimaTable();
 
             this.Query = $@"
-            INSERT INTO {this.Table}
-                       (IdCidadeClima
-                        ,Data
-                        ,Condicao
-                        ,Min
-                        ,Max
-                        ,IndiceUv
-                        ,CondicaoDesc
-                        ,CreatedOn)
-            VALUES
-            (
-                @IdCidadeClima,
-                @Data,
-                @Condicao,
-                @Min,
-                @Max,
-                @IndiceUv,
-                @CondicaoDesc,
-                @CreatedOn
-            )
+                INSERT INTO {this.Table}
+                        (IdCidadeClima
+                            ,Data
+                            ,Condicao
+                            ,Min
+                            ,Max
+                            ,IndiceUv
+                            ,CondicaoDesc
+                            ,CreatedOn)
+                VALUES
+                (
+                    @IdCidadeClima,
+                    @Data,
+                    @Condicao,
+                    @Min,
+                    @Max,
+                    @IndiceUv,
+                    @CondicaoDesc,
+                    @CreatedOn
+                )
             ";
 
             return new QueryModel(this.Query);

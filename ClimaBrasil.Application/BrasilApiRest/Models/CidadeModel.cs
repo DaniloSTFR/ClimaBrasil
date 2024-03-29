@@ -4,6 +4,7 @@ namespace ClimaBrasil.Application.BrasilApiRest.Models
 {
     public class CidadeModel
     {
+        public int? CodigoCidade { get; set; }
             
         [JsonPropertyName("cidade")]
         public string? Cidade { get; set; }

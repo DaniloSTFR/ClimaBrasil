@@ -14,20 +14,22 @@ namespace ClimaBrasil.Infrastructure.Queries.Input
             this.Table = Map.GetCidadeClimaTable();
 
             this.Query = $@"
-            INSERT INTO {this.Table}
-            {returnIDStr}
-            VALUES
-            (
-                @Cidade,
-                @Estado,
-                @AtualizadoEm,
-                @RotaRequest,
-                @CreatedOn
-            )
+                INSERT INTO {this.Table}
+                {returnIDStr}
+                VALUES
+                (   
+                    @CodigoCidade,
+                    @Cidade,
+                    @Estado,
+                    @AtualizadoEm,
+                    @RotaRequest,
+                    @CreatedOn
+                )
             ";
 
             this.Parameters = new 
             {
+                CodigoCidade = cidade.CodigoCidade,
                 Cidade = cidade.Cidade,
                 Estado = cidade.Estado,
                 AtualizadoEm = cidade.AtualizadoEm,

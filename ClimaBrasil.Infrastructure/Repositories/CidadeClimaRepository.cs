@@ -2,7 +2,9 @@
 
 using ClimaBrasil.Domain.Abstractions;
 using ClimaBrasil.Domain.Entities;
+using ClimaBrasil.Infrastructure.Factoy;
 using ClimaBrasil.Infrastructure.Queries.Input;
+using ClimaBrasil.Infrastructure.Queries.Output;
 using Dapper;
 using System.Data;
 
@@ -10,17 +12,17 @@ namespace ClimaBrasil.Infrastructure.Repositories
 {
     public class CidadesClimaRepository : ICidadesClimaRepository
     {
+        private readonly IClimaRepository _climaRepository;
         private readonly IDbConnection _dbConnection;
 
-        public CidadesClimaRepository(IDbConnection dbConnection)
+        public CidadesClimaRepository(IClimaRepository climaRepository, SqlFactory factory)
         {
-            _dbConnection = dbConnection;
-
+            _climaRepository = climaRepository;
+            _dbConnection = factory.SqlConnection();
         }
 
         public async Task<CidadeEntity> AddClimaCidade(CidadeEntity climaCidade)
         {
-            ClimaRepository _climaRepository = new ClimaRepository(_dbConnection);
 
             if (climaCidade is null)
                 throw new ArgumentNullException(nameof(climaCidade));
@@ -30,8 +32,8 @@ namespace ClimaBrasil.Infrastructure.Repositories
             {
                 using (_dbConnection)
                 {
-                   var climaCidadeID = await _dbConnection.ExecuteScalarAsync(query.Query, query.Parameters);
-                    if (climaCidadeID != null)
+                    var climaCidadeID = await _dbConnection.ExecuteScalarAsync(query.Query, query.Parameters);
+                    if (climaCidadeID is not null)
                     {
                         climaCidade.Id = Int32.Parse(climaCidadeID.ToString());
                         _climaRepository.AddClima(climaCidade.Clima,climaCidade.Id);
@@ -43,31 +45,76 @@ namespace ClimaBrasil.Infrastructure.Repositories
             }
             catch
             {
-                throw new Exception("Erro ao inserir Clima da Cidade");
+                throw new Exception("Erro ao inserir Clima da Cidade.");
             }
 
             return climaCidade;
         }
 
-        public Task<CidadeEntity> DeleteClimaCidade(int id)
+        public async Task<CidadeEntity> DeleteClimaCidade(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0)
+                throw new ArgumentNullException(nameof(id));
+
+            var cidade = await GetClimaCidadeById(id);
+
+            if (cidade is not null)
+            {
+                var query = new DeleteCidadeClimaByIdQuery().DeleteCidadeClimaByIdQueryModel(id);
+                try
+                {
+                    using (_dbConnection)
+                    {
+                        //_climaRepository.DeleteClimaByIdCidade(id);
+                        await _dbConnection.ExecuteAsync(query.Query, query.Parameters);
+                    }   
+                }
+                catch(Exception e)
+                {
+                    throw new Exception("Erro ao excluir o Clima da Cidade.");
+                }
+            }
+            return cidade;
         }
 
-        // TODO: Avaliar os retornos pois envolvem mais de uma tabela, usar Inner join
-        //SELECT * FROM CidadeClima AS CC
-	    //INNER JOIN Clima AS CL ON CC.Id = CL.[IdCidadeClima]
         public async Task<IEnumerable<CidadeEntity>> GetClimaCidade()
         {
-            string query = "SELECT * FROM dbo.CidadeClima";
-            return await _dbConnection.QueryAsync<CidadeEntity>(query);
+            var query = new SelectAllCidadeClimaQuery().SelectAllCidadeClimaQueryModel();
+            return await _dbConnection.QueryAsync<CidadeEntity>(query.Query);
         }
 
         // TODO: Avaliar os retornos pois envolvem mais de uma tabela, usar Inner join
         public async Task<CidadeEntity> GetClimaCidadeById(int id)
         {
-            string query = "SELECT * FROM dbo.CidadeClima WHERE Id = @Id";
-            return await _dbConnection.QueryFirstOrDefaultAsync<CidadeEntity>(query, new { Id = id });
+            if (id <= 0)
+                throw new ArgumentNullException(nameof(id));
+
+            CidadeEntity cidadeClima;
+            var queryCidade = new SelectCidadeClimaByIdQuery().SelectCidadeClimaByIdQueryModel(id);
+            var queryClima = new SelectCidadeClimaByIdQuery().SelectClimaByIdCidadeQueryModel(id);
+
+            try
+            {
+                using (_dbConnection)
+                {
+                    var resulCidade = await _dbConnection.QueryFirstOrDefaultAsync<CidadeEntity>(queryCidade.Query, queryCidade.Parameters);
+                    var resultClima = await _dbConnection.QueryAsync<ClimaEntity>(queryClima.Query, queryClima.Parameters) as List<ClimaEntity>;
+
+                    cidadeClima = new CidadeEntity(resulCidade.Id,
+                                                    resulCidade.CodigoCidade,
+                                                    resulCidade.Cidade,
+                                                    resulCidade.Estado,
+                                                    resulCidade.AtualizadoEm,
+                                                    resultClima,
+                                                    resulCidade.RotaRequest);
+                }   
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Erro ao buscar o Clima da Cidade.");
+            }
+
+            return cidadeClima;
         }
 
         public void UpdateClimaCidade(CidadeEntity climaCidade)

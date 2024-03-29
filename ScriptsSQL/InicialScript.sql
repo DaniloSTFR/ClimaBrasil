@@ -12,6 +12,7 @@ GO
 IF OBJECT_ID(N'dbo.CidadeClima', N'U') IS NULL
 CREATE TABLE dbo.CidadeClima (
     [Id] INT PRIMARY KEY IDENTITY(1,1),
+	[CodigoCidade] INT NOT NULL,
     [Cidade] [varchar](255) NOT NULL,
     [Estado] [varchar](255) NOT NULL,
     [AtualizadoEm] DATETIME NOT NULL,
@@ -88,6 +89,7 @@ GO
 
 INSERT INTO [dbo].[CidadeClima]
            ([Id]
+		   ,[CodigoCidade]
 		   ,[Cidade]
            ,[Estado]
            ,[AtualizadoEm]
@@ -96,6 +98,7 @@ INSERT INTO [dbo].[CidadeClima]
      VALUES
            (
 		    1
+			,999
 		   ,'Brejo Alegre'
            ,'SP'
            ,'2020-12-27'

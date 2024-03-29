@@ -1,5 +1,6 @@
 using ClimaBrasil.Domain.Abstractions;
 using ClimaBrasil.Domain.Entities;
+using ClimaBrasil.Infrastructure.Factoy;
 using ClimaBrasil.Infrastructure.Queries.Input;
 using Dapper;
 using System.Data;
@@ -10,9 +11,9 @@ namespace ClimaBrasil.Infrastructure.Repositories
     {
         private readonly IDbConnection _dbConnection;
 
-        public ClimaRepository(IDbConnection dbConnection)
+         public ClimaRepository(SqlFactory factory)
         {
-            _dbConnection = dbConnection;
+            _dbConnection = factory.SqlConnection();
         }
 
         public void AddClima(List<ClimaEntity> climaList, int IdCidadeClima)
@@ -37,5 +38,25 @@ namespace ClimaBrasil.Infrastructure.Repositories
             }
 
         }
+
+        public async void DeleteClimaByIdCidade(int IdCidadeClima)
+        {
+            if (IdCidadeClima <= 0)
+                throw new ArgumentNullException(nameof(IdCidadeClima));
+
+            var query = new DeleteClimaByIdCidadeClimaQuery().DeleteClimaByIdCidadeClimaQueryModel(IdCidadeClima);
+            try
+            {
+                using (_dbConnection)
+                {
+                    await _dbConnection.ExecuteAsync(query.Query, query.Parameters);
+                }   
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Erro ao excluir o Clima.");
+            }
+        }
+
     }
 }

@@ -61,7 +61,7 @@ namespace ClimaBrasil.API.Controllers
         {
             var query = new GetAeroportoClimaByIdQuery{ Id = id };
             var aeroportoClimaInDb = await _mediator.Send(query);
-            return aeroportoClimaInDb != null ? Ok(aeroportoClimaInDb) : 
+            return aeroportoClimaInDb is not null ? Ok(aeroportoClimaInDb) : 
                 NotFound("Clima do Aeroporto não encontrado no Banco de Dados.");
         }
 
@@ -74,7 +74,7 @@ namespace ClimaBrasil.API.Controllers
         {
             var command = new DeleteAeroportoClimaCommand{ Id = id };
             var deleteAeroportoClimaInDb = await _mediator.Send(command);
-            return deleteAeroportoClimaInDb != null ? Ok(deleteAeroportoClimaInDb) : 
+            return deleteAeroportoClimaInDb is not null ? Ok(deleteAeroportoClimaInDb) : 
                 NotFound("Clima do Aeroporto não encontrado no Banco de Dados.");
         }
     }

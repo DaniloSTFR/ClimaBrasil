@@ -8,6 +8,7 @@ using ClimaBrasil.Application.BrasilApiRest;
 using ClimaBrasil.Application.BrasilApiRest.Interfaces;
 using ClimaBrasil.Application.BrasilApiRest.Services;
 using ClimaBrasil.Application.BrasilApiRest.Mapping;
+using ClimaBrasil.Infrastructure.Factoy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,10 +43,11 @@ builder.Services.AddSingleton<IDbConnection>(provider =>
     return connection;
 });
 
-builder.Services.AddScoped<IAeroportosClimaRepository, AeroportosClimaRepository>();
+builder.Services.AddScoped<SqlFactory>();
+builder.Services.AddTransient<IAeroportosClimaRepository, AeroportosClimaRepository>();
+builder.Services.AddTransient<ICidadesClimaRepository, CidadesClimaRepository>();
+builder.Services.AddTransient<IClimaRepository, ClimaRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ICidadesClimaRepository, CidadesClimaRepository>();
-builder.Services.AddScoped<IClimaRepository, ClimaRepository>();
 
 var myhandlers = AppDomain.CurrentDomain.Load("ClimaBrasil.Application");
         builder.Services.AddMediatR(cfg =>

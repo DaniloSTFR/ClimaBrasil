@@ -5,6 +5,7 @@ namespace ClimaBrasil.Application.BrasilApiRest.DTOs
 {
     public class CidadeResponse
     {
+        public int? CodigoCidade { get; set; }
         public string? Cidade { get; set; }
         public string? Estado { get; set; }
         public DateTime? AtualizadoEm { get; set; }
