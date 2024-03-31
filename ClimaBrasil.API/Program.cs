@@ -47,6 +47,7 @@ builder.Services.AddScoped<SqlFactory>();
 builder.Services.AddTransient<IAeroportosClimaRepository, AeroportosClimaRepository>();
 builder.Services.AddTransient<ICidadesClimaRepository, CidadesClimaRepository>();
 builder.Services.AddTransient<IClimaRepository, ClimaRepository>();
+builder.Services.AddTransient<IErrorLogsRepository, ErrorLogsRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var myhandlers = AppDomain.CurrentDomain.Load("ClimaBrasil.Application");

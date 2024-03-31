@@ -4,17 +4,20 @@ using MediatR;
 using ClimaBrasil.Application.Handlers.BrasilApiClima.Queries;
 using ClimaBrasil.Application.Handlers.CidadesClima.Queries;
 using ClimaBrasil.Application.Handlers.CidadesClima.Commands;
+using ClimaBrasil.Application.Handlers.ErrorLogs.Commands;
+using System.Text.Json;
+using ClimaBrasil.Application.BrasilApiRest.Abstractions;
 
 namespace ClimaBrasil.API.Controllers
 {
 
     [ApiController]
     [Route("[controller]")]
-    public class CilmaCidadeController : ControllerBase
+    public class ClimaCidadeController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public CilmaCidadeController(IMediator mediator)
+        public ClimaCidadeController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -26,19 +29,36 @@ namespace ClimaBrasil.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BuscarCidadeClimaInApi([FromRoute] int codigoCidade) 
         {
-            var query = new BuscarCidadeClimaByCityCode{ CodigoCidade = codigoCidade };
-            var response = await _mediator.Send(query);
-
-            if(response.CodigoHttp == HttpStatusCode.OK) 
+            try
             {
-                var command = new CreateCidadeClimaCommand{ cidadeResponse = response.DadosRetorno };
-                var createdCiadeClimaInDb = await _mediator.Send(command);
+ 
+                var query = new BuscarCidadeClimaByCityCode{ CodigoCidade = codigoCidade };
+                var response = await _mediator.Send(query);
                 
-                return Ok(createdCiadeClimaInDb);
+                if(response.CodigoHttp == HttpStatusCode.OK) 
+                {
+                    var command = new CreateCidadeClimaCommand{ cidadeResponse = response.DadosRetorno };
+                    var createdCiadeClimaInDb = await _mediator.Send(command);
+                    
+                    return Ok(createdCiadeClimaInDb);
+                }
+                else 
+                {
+                    var json = JsonSerializer.Serialize(response.ErroRetorno);
+                    ErroRetornoAbstractions erroRetorno = JsonSerializer.Deserialize<ErroRetornoAbstractions>(json);
+                    var error = new ErrorLogsCommand{StatusCode = (int)response.CodigoHttp, ErrorMessage = erroRetorno.message, RotaControllerRequest = $"ClimaCidade/clima/fromAPI/{codigoCidade}"};
+                    var responseError = await _mediator.Send(error);
+
+                    return StatusCode((int)response.CodigoHttp, responseError);
+                }
+                
             }
-            else 
+            catch (Exception e)
             {
-                return StatusCode((int)response.CodigoHttp, response.ErroRetorno);
+                var error = new ErrorLogsCommand{StatusCode = 500,ErrorMessage = e.Message, RotaControllerRequest = $"ClimaCidade/clima/fromAPI/{codigoCidade}"};
+                var responseError = await _mediator.Send(error);
+
+                return StatusCode(error.StatusCode, responseError);
             }
         }
 

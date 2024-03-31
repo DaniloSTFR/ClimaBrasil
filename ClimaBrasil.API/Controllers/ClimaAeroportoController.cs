@@ -4,6 +4,9 @@ using MediatR;
 using ClimaBrasil.Application.Handlers.AeroportosClima.Queries;
 using ClimaBrasil.Application.Handlers.AeroportosClima.Commands;
 using ClimaBrasil.Application.Handlers.BrasilApiClima.Queries;
+using ClimaBrasil.Application.Handlers.ErrorLogs.Commands;
+using ClimaBrasil.Application.BrasilApiRest.Abstractions;
+using System.Text.Json;
 
 namespace ClimaBrasil.API.Controllers
 {
@@ -25,19 +28,36 @@ namespace ClimaBrasil.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BuscarAeroportoClimaInApi([FromRoute] string codigoAeroporto) 
         {
-            var query = new BuscarAeroportoClimaByIcaoCode{ CodigoAeroporto = codigoAeroporto };
-            var response = await _mediator.Send(query);
-
-            if(response.CodigoHttp == HttpStatusCode.OK) 
+  
+            try
             {
-                var command = new CreateAeroportoClimaCommand{ aeroportoResponse = response.DadosRetorno };
-                var createdAeroportoClimaInDb = await _mediator.Send(command);
+                var query = new BuscarAeroportoClimaByIcaoCode{ CodigoAeroporto = codigoAeroporto };
+                var response = await _mediator.Send(query);
 
-                return Ok(createdAeroportoClimaInDb);
+                if(response.CodigoHttp == HttpStatusCode.OK) 
+                {
+                    var command = new CreateAeroportoClimaCommand{ aeroportoResponse = response.DadosRetorno };
+                    var createdAeroportoClimaInDb = await _mediator.Send(command);
+
+                    return Ok(createdAeroportoClimaInDb);
+                }
+                else 
+                {
+                    var json = JsonSerializer.Serialize(response.ErroRetorno);
+                    ErroRetornoAbstractions erroRetorno = JsonSerializer.Deserialize<ErroRetornoAbstractions>(json);
+                    var error = new ErrorLogsCommand{StatusCode = (int)response.CodigoHttp, ErrorMessage = erroRetorno.message , RotaControllerRequest = $"ClimaAeroporto/clima/fromAPI/{codigoAeroporto}"};
+                    var responseError = await _mediator.Send(error);
+
+                    return StatusCode((int)response.CodigoHttp, responseError);
+                }
+                    
             }
-            else 
+            catch (Exception e)
             {
-                return StatusCode((int)response.CodigoHttp, response.ErroRetorno);
+                var error = new ErrorLogsCommand{StatusCode = 500, ErrorMessage = e.Message, RotaControllerRequest = $"ClimaAeroporto/clima/fromAPI/{codigoAeroporto}"};
+                var responseError = await _mediator.Send(error);
+
+                return StatusCode(error.StatusCode, responseError);
             }
         }
 

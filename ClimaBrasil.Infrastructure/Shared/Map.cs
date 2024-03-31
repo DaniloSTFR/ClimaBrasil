@@ -21,6 +21,11 @@ namespace ClimaBrasil.Infrastructure.Shared
         {
             return "[dbo].[AeroportoClima]";
         }
+
+        public static string GetErrorLogsTable()
+        {
+            return "[dbo].[ErrorLogs]";
+        }
         
     }
 }

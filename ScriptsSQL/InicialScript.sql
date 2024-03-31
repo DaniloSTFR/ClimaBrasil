@@ -54,6 +54,16 @@ CREATE TABLE dbo.AeroportoClima (
     [CreatedOn] DATETIME NOT NULL,
 )ON [PRIMARY]
 GO
+
+IF OBJECT_ID(N'dbo.ErrorLogs', N'U') IS NULL
+CREATE TABLE dbo.ErrorLogs (
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [StatusCode] [int],
+    [ErrorMessage] [varchar](500) NOT NULL,
+    [RotaControllerRequest] [nvarchar](500) NOT NULL,
+    [CreatedOn] DATETIME NOT NULL,
+)ON [PRIMARY]
+GO
 ---------------------------------------------------------
 
 USE [BrasilApiClima]
